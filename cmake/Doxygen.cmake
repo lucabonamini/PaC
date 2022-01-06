@@ -9,6 +9,7 @@ function(enable_doxygen)
       set(DOXYGEN_INPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
       set(DOXYGEN_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/docs)
       set(DOXYGEN_GENERATE_HTML YES)
+      set(DOXYGEN_HTML_OUTPUT ${PROJECT_SOURCE_DIR}/docs)
       set(DOXYGEN_GENERATE_LATEX NO)
 
       doxygen_add_docs(Doxygen "${PROJECT_SOURCE_DIR}" ALL COMMENT "Generating docs")
