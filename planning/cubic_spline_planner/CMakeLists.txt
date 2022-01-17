@@ -13,13 +13,14 @@ target_include_directories(CubicSplinePlanner PUBLIC
     $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(CubicSplinePlanner
-  PRIVATE 
+  PRIVATE
     Utilities::Utilities
     Eigen3::Eigen # this should be PUBLIC since its header is in cubic_spline_planner.h
 )
 target_compile_options(CubicSplinePlanner PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-std=c++17>)
 
 if(USE_TESTS)
+    set(CMAKE_CXX_CLANG_TIDY "")
     message("Compiling CubicSplinePlanner tests")
     add_subdirectory(tests)
 endif()
