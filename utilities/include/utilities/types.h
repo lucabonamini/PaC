@@ -1,6 +1,3 @@
-#ifndef UTILITIES_TYPES_H
-#define UTILITIES_TYPES_H
-
 #pragma once
 
 #include <vector>
@@ -31,5 +28,3 @@ using Track = std::vector<Point>;
 using Path = std::vector<Position>;
 using Traj = std::vector<State>;
 } // namespace types
-#endif
-// namespace types

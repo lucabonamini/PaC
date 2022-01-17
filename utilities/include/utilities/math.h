@@ -3,7 +3,10 @@
 #include "utilities/types.h"
 #include <cmath>
 #include <cstddef>
+#include <numeric>
 #include <vector>
+
+constexpr double pi_2 = 2 * M_PI;
 
 namespace utilities::math {
 // TODO(lucabonamini): functions returning void have to be avoided
@@ -17,6 +20,7 @@ static inline void findClosestIndex(int &index,
                                     const types::Point &point,
                                     const types::Path &path);
 
+// TODO(lucabonamini): replace with std::accumulate
 template <typename T>
 std::vector<T> cumSum(const std::vector<T> &input) {
   std::vector<T> output;
@@ -39,14 +43,14 @@ std::vector<T> vecDiff(const std::vector<T> &input) {
 
 template <typename T>
 T normalizeAnglePositive(T angle) {
-  return fmod(fmod(angle, 2.0 * M_PI) + 2.0 * M_PI, 2.0 * M_PI);
+  return fmod(fmod(angle, pi_2) + pi_2, pi_2);
 }
 
 template <typename T>
 T normalizeAngle(T angle) {
   T a = normalizeAnglePositive(angle);
   if (a > M_PI) {
-    a -= 2.0 * M_PI;
+    a -= pi_2;
   }
   return a;
 }
@@ -58,10 +62,9 @@ T shortestAngularDistance(T from, T to) {
 
 template <typename T>
 T sumOfPower(std::vector<T> value_list) {
-  T sum = 0;
-  for (T item : value_list) {
-    sum += item * item;
-  }
-  return sum;
+  auto sum_of_power = std::accumulate(value_list.begin(), value_list.end(), 0.0, [](auto product, auto x) {
+      return product + std::pow(x, 2);
+  });
+  return sum_of_power;
 }
 } // namespace utilities::math

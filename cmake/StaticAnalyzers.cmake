@@ -1,4 +1,4 @@
-option(ENABLE_INCLUDE_WHAT_YOU_USE "Enable static analysis with include-what-you-use" OFF)
+option(ENABLE_INCLUDE_WHAT_YOU_USE "Enable static analysis with include-what-you-use" ON)
 option(ENABLE_CPPCHECK "Enable static analysis with cppcheck" ON)
 option(ENABLE_CLANG_TIDY "Enable static analysis with clang-tidy" ON)
 option(ENABLE_CLANG_FORMAT "Enable automatic formatting with clang-format" ON)
@@ -32,10 +32,8 @@ endif()
 if(ENABLE_CLANG_TIDY)
   find_program(CLANGTIDY clang-tidy)
   if(CLANGTIDY)
-    set(CMAKE_CXX_CLANG_TIDY 
-      ${CLANGTIDY} 
-      -header-filter=. 
-      -checks='-llvm-header-guard,-hicpp-*,*' 
+    set(CMAKE_CXX_CLANG_TIDY
+      ${CLANGTIDY}
       -extra-arg=-Wno-unknown-warning-option)
     if(WARNINGS_AS_ERRORS)
       list(APPEND CMAKE_CXX_CLANG_TIDY -warnings-as-errors=*)
