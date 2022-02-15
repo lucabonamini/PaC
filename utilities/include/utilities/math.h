@@ -16,7 +16,7 @@ namespace utilities::math {
  * @param point Coordinates to evaluate
  * @param path Reference path to use for calculation
  */
-static inline void findClosestIndex(int &index,
+void findClosestIndex(int &index,
                                     const types::Point &point,
                                     const types::Path &path);
 

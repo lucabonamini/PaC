@@ -25,6 +25,7 @@ include(cmake/StaticAnalyzers.cmake)
 option(USE_UTILITIES "Enable compilation of Utilities library" ON)
 option(USE_MODELS "Enable compilation of Models library" ON)
 option(USE_PLANNING "Enable compilation of Planning algorithms" ON)
+option(USE_CONTROL "Enable compilation of Control algorithms" ON)
 
 option(USE_TESTS "Enable tests" ON)
 
@@ -44,4 +45,10 @@ endif()
 if(USE_PLANNING)
   message("Compiling Planners")
   add_subdirectory(planning)
+endif()
+
+# Control
+if(USE_CONTROL)
+  message("Compiling Controllers")
+  add_subdirectory(control)
 endif()
