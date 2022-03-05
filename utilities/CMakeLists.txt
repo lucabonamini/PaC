@@ -4,7 +4,7 @@ project(Utilities)
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/lib)
 
-add_library(Utilities SHARED src/math.cpp)
+add_library(Utilities SHARED src/math.cpp src/types.cpp)
 add_library(Utilities::Utilities ALIAS Utilities)
 target_include_directories(Utilities PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

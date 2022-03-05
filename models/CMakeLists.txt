@@ -18,7 +18,8 @@ target_include_directories(Unicycle PUBLIC
     $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(Unicycle
-  PUBLIC Utilities::Utilities
+  PUBLIC
+    Utilities::Utilities
 )
 target_compile_options(Unicycle PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-std=c++17>)
 

@@ -11,13 +11,14 @@ Spline::Spline(const std::vector<double> &x, const std::vector<double> &y)
     : x(x), y(y), nx(x.size()), h(utilities::math::vecDiff(x)), a(y) {
   Eigen::MatrixXd A = calc_A();
   Eigen::VectorXd B = calc_B();
-  Eigen::VectorXd c_eigen = A.colPivHouseholderQr().solve(B);  // NOLINT
+  Eigen::VectorXd c_eigen = A.colPivHouseholderQr().solve(B); // NOLINT
   c.resize(c_eigen.size());
   Eigen::VectorXd::Map(&c[0], c_eigen.size()) = c_eigen;
 
   for (int i = 0; i < nx - 1; i++) {
     d.push_back((c[i + 1] - c[i]) / (coeff_a * h[i]));
-    b.push_back((a[i + 1] - a[i]) / h[i] - h[i] * (c[i + 1] + coeff_c * c[i]) / coeff_a);
+    b.push_back((a[i + 1] - a[i]) / h[i] -
+                h[i] * (c[i + 1] + coeff_c * c[i]) / coeff_a);
   }
 }
 
@@ -68,8 +69,8 @@ Eigen::MatrixXd Spline::calc_A() {
 Eigen::VectorXd Spline::calc_B() {
   Eigen::VectorXd B = Eigen::VectorXd::Zero(nx);
   for (int i = 0; i < nx - 2; i++) {
-    B(i + 1) =
-        coeff_a * (a[i + 2] - a[i + 1]) / h[i + 1] - coeff_a * (a[i + 1] - a[i]) / h[i];
+    B(i + 1) = coeff_a * (a[i + 2] - a[i + 1]) / h[i + 1] -
+               coeff_a * (a[i + 1] - a[i]) / h[i];
   }
   return B;
 }
@@ -87,7 +88,7 @@ int Spline::bisect(double t, int start, int end) {
 
 Spline2D::Spline2D(const std::vector<double> &x, const std::vector<double> &y)
     : s{calc_s(x, y)} {
-  sx = Spline(s, x);  // NOLINT
+  sx = Spline(s, x); // NOLINT
   sy = Spline(s, y);
 }
 
@@ -102,7 +103,8 @@ double Spline2D::calc_curvature(double s_t) {
   double ddx = sx.calc_dd(s_t);
   double dy = sy.calc_d(s_t);
   double ddy = sy.calc_dd(s_t);
-  return (ddy * dx - ddx * dy) / std::pow((dx * dx + dy * dy), coeff_a / coeff_c);
+  return (ddy * dx - ddx * dy) /
+         std::pow((dx * dx + dy * dy), coeff_a / coeff_c);
 }
 
 double Spline2D::calc_yaw(double s_t) {

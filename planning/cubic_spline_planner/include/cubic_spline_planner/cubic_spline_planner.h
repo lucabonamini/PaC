@@ -12,6 +12,7 @@ class Spline {
 public:
   Spline() = default;
   Spline(const std::vector<double> &x, const std::vector<double> &y);
+
 private:
   friend class Spline2D;
   std::vector<double> x;
@@ -41,6 +42,7 @@ public:
   std::array<double, 2> calc_position(double s_t);
   double calc_yaw(double s_t);
   std::vector<double> s;
+
 private:
   double calc_curvature(double s_t);
   std::array<double, 2> calcCartesianCoordinates(const double &s,
