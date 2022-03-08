@@ -17,8 +17,8 @@ namespace utilities::math {
  * @param path Reference path to use for calculation
  */
 void findClosestIndex(int &index,
-                                    const types::Point &point,
-                                    const types::Path &path);
+                      const types::Point &point,
+                      const types::Path &path);
 
 // TODO(lucabonamini): replace with std::accumulate
 template <typename T>
@@ -62,9 +62,10 @@ T shortestAngularDistance(T from, T to) {
 
 template <typename T>
 T sumOfPower(std::vector<T> value_list) {
-  auto sum_of_power = std::accumulate(value_list.begin(), value_list.end(), 0.0, [](auto product, auto x) {
-      return product + std::pow(x, 2);
-  });
+  auto sum_of_power = std::accumulate(
+      value_list.begin(), value_list.end(), 0.0, [](auto product, auto x) {
+        return product + std::pow(x, 2);
+      });
   return sum_of_power;
 }
 } // namespace utilities::math

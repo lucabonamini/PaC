@@ -23,7 +23,7 @@ int main() {
     res_y.push_back(p.at(1));
   }
 
-  plt::plot(wx,wy,"or");
+  plt::plot(wx, wy, "or");
   plt::plot(res_x, res_y);
   plt::show();
 
