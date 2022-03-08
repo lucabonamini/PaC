@@ -42,10 +42,10 @@ int main() {
       control::PurePursuit::Config{.lookahead_time = LAT,
                                    .target_velocity = TARGET_VELOCITY,
                                    .path_resolution = PATH_RESOLUTION,
-                                   .path = std::move(path)});
+                                   .path = std::move(path),
+                                   .type = "Adaptive"});
 
   while (time < MAX_TIME) {
-    pp.setCurrentVelocity(state.v);
     auto controls = pp.computeCommands(state);
 
     uni.updateState(state, controls);

@@ -8,7 +8,7 @@ double PurePursuit::calcLookaheadDistance_() const {
 types::Point PurePursuit::calcTargetPoint_(const types::State &robot_state) {
   utilities::math::findClosestIndex(
       closest_index_, {robot_state.x, robot_state.y}, config_.path);
-  auto lookahead_distance = calcLookaheadDistance_();
+  double lookahead_distance = calcLookaheadDistance_();
   size_t id =
       round(lookahead_distance / config_.path_resolution) + closest_index_;
   if (id > config_.path.size() - 1) {
@@ -27,6 +27,12 @@ PurePursuit::transformToLocalCoordinates_(const types::Point &target_point,
 }
 
 types::Controls PurePursuit::computeCommands(const types::State &robot_state) {
+  // TODO(lucabonamini): better manage controller type choice 
+  if (config_.type == "Adaptive") {
+    current_velocity_ = robot_state.v;
+  } else {
+    current_velocity_ = config_.target_velocity;
+  }
   auto target_point = calcTargetPoint_(robot_state);
   auto target_point_local =
       transformToLocalCoordinates_(target_point, robot_state);

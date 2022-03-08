@@ -13,8 +13,9 @@ public:
     double target_velocity = 0.0;
     double path_resolution = 0.0;
     types::Path path;
+    std::string type;
   };
-  explicit PurePursuit(const Config &config) : config_(config){}
+  explicit PurePursuit(const Config &config) : config_(config) {}
   virtual ~PurePursuit() = default;
   types::Controls computeCommands(const types::State &robot_state);
   void setCurrentVelocity(double linear_velocity) {
@@ -23,6 +24,7 @@ public:
 
 private:
   double calcLookaheadDistance_() const;
+  double calcAdaptiveLookaheadDistance_(const double &current_velocity) const;
   types::Point calcTargetPoint_(const types::State &robot_state);
   static types::Point
   transformToLocalCoordinates_(const types::Point &target_point,
