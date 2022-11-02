@@ -41,10 +41,10 @@ public:
   Spline2D(const std::vector<double> &x, const std::vector<double> &y);
   std::array<double, 2> calc_position(double s_t);
   double calc_yaw(double s_t);
+  double calc_curvature(double s_t);
   std::vector<double> s;
 
 private:
-  double calc_curvature(double s_t);
   std::array<double, 2> calcCartesianCoordinates(const double &s,
                                                  const double &d);
   static std::vector<double> calc_s(const std::vector<double> &x,

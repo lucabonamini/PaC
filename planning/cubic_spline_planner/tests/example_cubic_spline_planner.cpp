@@ -12,8 +12,7 @@ int main() {
   std::vector<double> wx{-2.5, 0.0, 2.5, 5.0, 7.5, 3.0, -1.0};
   std::vector<double> wy{0.7, -6.0, 5.0, 6.5, 0.0, 5.0, -2.0};
 
-  std::vector<double> res_x;
-  std::vector<double> res_y;
+  std::vector<double> res_x, res_y, res_s, res_k;
 
   planning::Spline2D csp(wx, wy);
   ::types::Path path;
@@ -23,31 +22,26 @@ int main() {
     auto p = csp.calc_position(i);
     res_x.push_back(p.at(0));
     res_y.push_back(p.at(1));
+    res_s.push_back(i);
+    res_k.push_back(csp.calc_curvature(i));
 
     path.push_back(::types::Position{
-      .point=::types::Point{
-        .x=p.at(0),
-        .y=p.at(1)
-      },
-      .yaw=0.0
-    });
+        .point = ::types::Point{.x = p.at(0), .y = p.at(1)}, .yaw = 0.0});
   }
 
+  auto traj_v = ::planning::computeSpeedProfile(res_s, res_k);
+  std::vector<double> traj_x, traj_y;
 
-  auto traj = ::planning::computeSpeedProfile(path,0.0,2.0);
-  std::vector<double> traj_x,traj_y,traj_v;
-
-  for (size_t i = 0; i < traj.size(); i++) {
-    traj_x.push_back(traj.at(i).x);
-    traj_y.push_back(traj.at(i).y);
-    traj_v.push_back(traj.at(i).v);
+  for (size_t i = 0; i < traj_v.size(); i++) {
+    traj_x.push_back(res_x.at(i));
+    traj_y.push_back(res_y.at(i));
   }
 
   plt::figure();
   plt::plot(wx, wy, "or");
   plt::plot(res_x, res_y);
   plt::figure();
-  plt::plot(traj_x,traj_y);
+  plt::plot(traj_x, traj_y);
   plt::figure();
   plt::plot(traj_v);
   plt::show();
