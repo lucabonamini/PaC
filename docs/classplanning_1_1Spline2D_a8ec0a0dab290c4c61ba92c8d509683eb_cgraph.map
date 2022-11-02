@@ -1,0 +1,5 @@
+<map id="planning::Spline2D::calc_curvature" name="planning::Spline2D::calc_curvature">
+<area shape="rect" id="node2" href="$classplanning_1_1Spline.html#a5aeee08973e8a14445d83a638961129a" title="planning::Spline::calc_d" alt="" coords="187,5,347,32"/>
+<area shape="rect" id="node4" href="$classplanning_1_1Spline.html#a250431a4de270dd8b0c3f688222f5d6c" title="planning::Spline::calc_dd" alt="" coords="184,56,351,83"/>
+<area shape="rect" id="node3" href="$classplanning_1_1Spline.html#abee412149094fc34bc6b016a794c18f0" title="planning::Spline::bisect" alt="" coords="399,31,556,57"/>
+</map>

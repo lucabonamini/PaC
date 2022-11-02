@@ -1,0 +1,11 @@
+<map id="run&#45;clang&#45;format.main" name="run&#45;clang&#45;format.main">
+<area shape="rect" id="node2" href="$namespacerun-clang-format.html#a0febb6e1d727bf11f27266dbcc126317" title="run&#45;clang&#45;format.print\l_trouble" alt="" coords="220,5,365,47"/>
+<area shape="rect" id="node4" href="$namespacerun-clang-format.html#a42aabbc5281aa0d96220cb1a2657eb0e" title="run&#45;clang&#45;format.excludes\l_from_file" alt="" coords="207,71,379,112"/>
+<area shape="rect" id="node5" href="$namespacerun-clang-format.html#abcfeb4d6461bd99e4bf4da5b55fd92a2" title="run&#45;clang&#45;format.list\l_files" alt="" coords="224,136,361,177"/>
+<area shape="rect" id="node6" href="$namespacerun-clang-format.html#ac5870251da0a153929c00a4d46b51ecf" title="run&#45;clang&#45;format.run\l_clang_format_diff_wrapper" alt="" coords="201,201,384,243"/>
+<area shape="rect" id="node9" href="$namespacerun-clang-format.html#a7c182d2a751a005cefa7a3486b3787b4" title="run&#45;clang&#45;format.print_diff" alt="" coords="207,267,378,294"/>
+<area shape="rect" id="node3" href="$namespacerun-clang-format.html#a2add62c21789268fa4c64195180518ff" title="run&#45;clang&#45;format.bold_red" alt="" coords="432,13,601,39"/>
+<area shape="rect" id="node7" href="$namespacerun-clang-format.html#aec2bd5db0be3d76d97ea84af7f88e464" title="run&#45;clang&#45;format.run\l_clang_format_diff" alt="" coords="447,201,586,243"/>
+<area shape="rect" id="node8" href="$namespacerun-clang-format.html#a4aad3d0dbdfce7ef9751d9ba397005c5" title="run&#45;clang&#45;format.make_diff" alt="" coords="649,209,827,235"/>
+<area shape="rect" id="node10" href="$namespacerun-clang-format.html#a2625274c20ef02ef310b066a0275aebc" title="run&#45;clang&#45;format.colorize" alt="" coords="434,267,599,294"/>
+</map>
