@@ -16,11 +16,11 @@ target_link_libraries(SpeedProfile
 )
 target_compile_options(SpeedProfile PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-std=c++17>)
 
-# if(USE_TESTS)
-#     set(CMAKE_CXX_CLANG_TIDY "")
-#     message("Compiling SpeedProfile tests")
-#     add_subdirectory(tests)
-# endif()
+if(USE_TESTS)
+    set(CMAKE_CXX_CLANG_TIDY "")
+    message("Compiling SpeedProfile tests")
+    add_subdirectory(tests)
+endif()
 
 install(TARGETS SpeedProfile
     EXPORT SpeedProfile-export
