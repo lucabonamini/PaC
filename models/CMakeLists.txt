@@ -25,7 +25,7 @@ target_compile_options(Unicycle PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-std=c++17>)
 
 add_library(DynamicUnicycle SHARED src/dynamic_unicycle.cpp)
 add_library(Models::DynamicUnicycle ALIAS DynamicUnicycle)
-target_include_directories(Unicycle PUBLIC
+target_include_directories(DynamicUnicycle PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )

@@ -25,9 +25,9 @@ std::vector<double> computeSpeedProfile(const std::vector<double> &s,
   }
   // Forward integration step
   for (size_t i = 1; i < v1.size(); i++) {
-    v2.push_back(std::min(
-        sqrt(pow(v1.at(i - 1), 2) + 2 * max_acceleration * (s.at(i) - s.at(i - 1))),
-        v1.at(i)));
+    v2.push_back(std::min(sqrt(pow(v1.at(i - 1), 2) +
+                               2 * max_acceleration * (s.at(i) - s.at(i - 1))),
+                          v1.at(i)));
   }
   // TO DO fix backward step
   for (size_t i = v2.size() - 1; i > 1; i--) {
