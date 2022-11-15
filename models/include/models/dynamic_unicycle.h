@@ -3,10 +3,10 @@
 #include "model.h"
 
 namespace model {
-class Unicycle : public RobotModel {
+class DynamicUnicycle : public RobotModel {
 public:
-  Unicycle() = default;
-  explicit Unicycle(const double &frequency);
+  DynamicUnicycle() = default;
+  explicit DynamicUnicycle(const double &frequency);
   void updateState(types::State &state,
                    const types::Controls &controls) override;
   double calcTrackError(const types::State &state,

@@ -23,6 +23,17 @@ target_link_libraries(Unicycle
 )
 target_compile_options(Unicycle PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-std=c++17>)
 
+add_library(DynamicUnicycle SHARED src/dynamic_unicycle.cpp)
+add_library(Models::DynamicUnicycle ALIAS DynamicUnicycle)
+target_include_directories(Unicycle PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+target_link_libraries(DynamicUnicycle
+  PUBLIC
+    Utilities::Utilities
+)
+target_compile_options(DynamicUnicycle PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-std=c++17>)
 
 install(TARGETS Models
     EXPORT Models-export
