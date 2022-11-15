@@ -24,14 +24,3 @@ target_link_libraries(example_pure_pursuit
   Python3::Module
 )
 target_compile_options(example_pure_pursuit PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-std=c++17>)
-
-add_executable(example_adaptive_pure_pursuit example_adaptive_pure_pursuit.cpp)
-target_link_libraries(example_adaptive_pure_pursuit
-  Utilities::Utilities
-  Models::Unicycle
-  Planning::CubicSplinePlanner
-  Control::PurePursuit
-  Python3::Python
-  Python3::Module
-)
-target_compile_options(example_adaptive_pure_pursuit PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-std=c++17>)
