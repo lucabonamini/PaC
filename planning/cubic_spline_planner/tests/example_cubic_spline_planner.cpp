@@ -29,7 +29,7 @@ int main() {
         .point = ::types::Point{.x = p.at(0), .y = p.at(1)}, .yaw = 0.0});
   }
 
-  auto traj_v = ::planning::computeSpeedProfile(res_s, res_k);
+  auto traj_v = ::planning::computeSpeedProfile(res_s, res_k, 1.0, 0.5);
   std::vector<double> traj_x, traj_y;
 
   for (size_t i = 0; i < traj_v.size(); i++) {
