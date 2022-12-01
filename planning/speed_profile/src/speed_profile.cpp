@@ -15,13 +15,16 @@ std::vector<double> computeSpeedProfile(const std::vector<double> &s,
 
   // Calc maximum permissible steady state vehicle speed
   for (const auto &el : k) {
+    double velocity = 0.0;
     if (std::abs(el) > 0.0001) {
-      auto velocity = sqrt(max_acceleration / std::abs(el));
+      velocity = sqrt(max_acceleration / std::abs(el));
       if (velocity > max_longitudinal_velocity) {
         velocity = max_longitudinal_velocity;
       }
-      v1.push_back(velocity);
+    } else {
+      velocity = max_longitudinal_velocity;
     }
+    v1.push_back(velocity);
   }
   // Forward integration step
   for (size_t i = 1; i < v1.size(); i++) {
@@ -37,6 +40,6 @@ std::vector<double> computeSpeedProfile(const std::vector<double> &s,
                  v2.at(i)));
   }
   std::reverse(v3.begin(), v3.end());
-  return v2;
+  return v1;
 }
 } // namespace planning
