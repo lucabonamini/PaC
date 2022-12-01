@@ -30,7 +30,7 @@ install(TARGETS Pid
 
 install(EXPORT Pid-export
     FILE PidTargets.cmake
-    NAMESPACE Planning::
+    NAMESPACE Control::
     DESTINATION lib/cmake/Pid
 )
 install(
