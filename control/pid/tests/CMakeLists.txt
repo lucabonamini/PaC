@@ -17,8 +17,9 @@ include_directories(SYSTEM ${matplotlib_SOURCE_DIR})
 add_executable(example_pid example_pid.cpp)
 target_link_libraries(example_pid
   Utilities::Utilities
-  Models::Unicycle
+  Models::DynamicUnicycle
   Planning::CubicSplinePlanner
+  Planning::SpeedProfile
   Control::Pid
   Python3::Python
   Python3::Module
