@@ -19,6 +19,7 @@ target_link_libraries(example_pure_pursuit
   Utilities::Utilities
   Models::Unicycle
   Planning::CubicSplinePlanner
+  Planning::SpeedProfile
   Control::PurePursuit
   Python3::Python
   Python3::Module
