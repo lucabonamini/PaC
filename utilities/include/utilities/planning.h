@@ -29,5 +29,5 @@ void findClosestIndex(size_t &index,
     }
   }
 }
-} // namespace planning 
+} // namespace planning
 } // namespace utilities

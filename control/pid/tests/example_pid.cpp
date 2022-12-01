@@ -7,7 +7,6 @@
 #include "utilities/planning.h"
 #include "utilities/types.h"
 
-
 namespace plt = matplotlibcpp;
 
 constexpr int MAX_TIME = 5000;
@@ -54,7 +53,8 @@ int main() {
 
   size_t closest_index = 0;
   while (time < MAX_TIME) {
-    ::utilities::planning::findClosestIndex(closest_index, {state.x, state.y}, path);
+    ::utilities::planning::findClosestIndex(
+        closest_index, {state.x, state.y}, path);
 
     auto steer = pid.calcCommand(utilities::math::normalizeAngle(
         path.at(closest_index).yaw - state.yaw));
