@@ -4,13 +4,13 @@ project(Utilities)
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/lib)
 
-add_library(Utilities SHARED src/math.cpp src/types.cpp)
+add_library(Utilities INTERFACE)
 add_library(Utilities::Utilities ALIAS Utilities)
-target_include_directories(Utilities PUBLIC
+target_include_directories(Utilities INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
-target_compile_options(Utilities PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-std=c++17>)
+target_compile_options(Utilities INTERFACE $<$<COMPILE_LANGUAGE:CXX>:-std=c++17>)
 
 install(TARGETS Utilities
     EXPORT Utilities-export

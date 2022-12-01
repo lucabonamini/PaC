@@ -1,26 +1,13 @@
 #pragma once
 
-#include "utilities/types.h"
 #include <cmath>
-#include <cstddef>
 #include <numeric>
 #include <vector>
 
 constexpr double pi_2 = 2 * M_PI;
 
-namespace utilities::math {
-// TODO(lucabonamini): functions returning void have to be avoided
-/**
- * @brief Calculate the closest point's index on a reference path.
- * @param index Variable used to store resulting index
- * @param point Coordinates to evaluate
- * @param path Reference path to use for calculation
- */
-void findClosestIndex(int &index,
-                      const types::Point &point,
-                      const types::Path &path);
-
-// TODO(lucabonamini): replace with std::accumulate
+namespace utilities {
+namespace math {
 template <typename T>
 std::vector<T> cumSum(const std::vector<T> &input) {
   std::vector<T> output;
@@ -68,4 +55,5 @@ T sumOfPower(std::vector<T> value_list) {
       });
   return sum_of_power;
 }
-} // namespace utilities::math
+} // namespace math
+} // namespace utilities
