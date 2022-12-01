@@ -3,8 +3,6 @@
 #include "speed_profile/speed_profile.h"
 #include "utilities/types.h"
 
-#include <thread>
-
 namespace plt = matplotlibcpp;
 
 int main() {
@@ -24,7 +22,6 @@ int main() {
   }
 
   auto rv = ::planning::computeSpeedProfile(rs, rk, 1.0, 0.5);
-
   plt::figure();
   plt::plot(rk, "*");
   plt::plot(rv, "*");
