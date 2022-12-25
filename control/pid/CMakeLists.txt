@@ -39,6 +39,6 @@ install(
 )
 install(
     FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ModelsConfig.cmake
-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/Pid"
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake/PidConfig.cmake
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/pid"
 )

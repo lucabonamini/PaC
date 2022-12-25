@@ -7,7 +7,19 @@
 #include "utilities/planning.h"
 #include "utilities/types.h"
 
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/opencv.hpp>
+
+
 namespace plt = matplotlibcpp;
+
+cv::Point2i cv_offset(float x, float y, int image_height = 2000) {
+  cv::Point2i output;
+  output.x = int(x * 100) + 600;
+  output.y = image_height - int(y * 100) - image_height / 2;
+  return output;
+}
 
 constexpr int MAX_TIME = 5000;
 
@@ -56,9 +68,9 @@ int main() {
     ::utilities::planning::findClosestIndex(
         closest_index, {state.x, state.y}, path);
 
-    auto steer = pid.calcCommand(utilities::math::normalizeAngle(
+    auto steer = pid.calculateValue(utilities::math::normalizeAngle(
         path.at(closest_index).yaw - state.yaw));
-    auto speed = v_pid.calcCommand(rv.at(closest_index) - state.v);
+    auto speed = v_pid.calculateValue(rv.at(closest_index) - state.v);
 
     ::types::Controls controls{.steer = steer, .v = speed, .a = 0.0};
 
@@ -74,6 +86,29 @@ int main() {
     }
     time++;
     states.push_back(state);
+
+    cv::Mat bg(2000, 2000, CV_8UC3, cv::Scalar(255, 255, 255));
+    for(unsigned int i=1; i<rx.size(); i++){
+      cv::line(
+        bg,
+        cv_offset(rx[i-1], ry[i-1], bg.rows),
+        cv_offset(rx[i], ry[i], bg.rows),
+        cv::Scalar(0, 0, 0),
+        10);
+    }
+    cv::circle(
+        bg, cv_offset(rx.back(), ry.back(), bg.rows), 30, cv::Scalar(255, 0, 0), -1);
+    cv::circle(bg,
+                cv_offset(state.x, state.y, bg.rows),
+                30,
+                cv::Scalar(0, 255, 0),
+                -1);
+
+    decltype(bg) outImg;
+    cv::resize(bg, outImg, cv::Size(), 0.2, 0.2);
+    cv::imshow("pid", outImg);
+    cv::waitKey(5);
+
   }
 
   // Visualization
