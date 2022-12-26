@@ -1,5 +1,7 @@
 option(PID "Enable compilation of Pid controller" ON)
 option(PURE_PURSUIT "Enable compilation of Pure Pursuit controller" ON)
+option(DWA "Enable compilation of Dwa controller" ON)
+option(MPC "Enable compilation of Mpc controller" ON)
 
 # Pid
 if(PID)
@@ -13,3 +15,8 @@ if(PURE_PURSUIT)
   add_subdirectory(pure_pursuit)
 endif()
 
+# Dwa
+if(DWA)
+  message("Compiling Dwa")
+  add_subdirectory(dwa)
+endif()
