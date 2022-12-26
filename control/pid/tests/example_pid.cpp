@@ -1,5 +1,4 @@
 #include "cubic_spline_planner/cubic_spline_planner.h"
-#include "matplotlibcpp.h"
 #include "models/dynamic_unicycle.h"
 #include "pid/pid.h"
 #include "speed_profile/speed_profile.h"
@@ -12,7 +11,7 @@
 #include <opencv2/opencv.hpp>
 
 
-namespace plt = matplotlibcpp;
+constexpr int MAX_TIME = 5000;
 
 cv::Point2i cv_offset(float x, float y, int image_height = 2000) {
   cv::Point2i output;
@@ -20,8 +19,6 @@ cv::Point2i cv_offset(float x, float y, int image_height = 2000) {
   output.y = image_height - int(y * 100) - image_height / 2;
   return output;
 }
-
-constexpr int MAX_TIME = 5000;
 
 int main() {
 
@@ -54,7 +51,7 @@ int main() {
   state.yaw = std::atan2((ry.at(1) - ry.at(0)), (rx.at(1) - rx.at(0)));
   state.v = 0.0;
   model::DynamicUnicycle unicycle(10.0);
-  control::Pid pid(20.0, 0.0, 0.0);
+  control::Pid pid(15.0, 0.0, 0.0);
   control::Pid v_pid(1.0, 0.0, 0.0);
 
   auto rv = ::planning::computeSpeedProfile(rs, rk, 1.0, 0.5);
@@ -88,42 +85,40 @@ int main() {
     states.push_back(state);
 
     cv::Mat bg(2000, 2000, CV_8UC3, cv::Scalar(255, 255, 255));
-    for(unsigned int i=1; i<rx.size(); i++){
+    for(size_t i=1; i<rx.size(); i++){
       cv::line(
         bg,
-        cv_offset(rx[i-1], ry[i-1], bg.rows),
-        cv_offset(rx[i], ry[i], bg.rows),
+        cv_offset(rx.at(i-1), ry.at(i-1), bg.rows),
+        cv_offset(rx.at(i), ry.at(i), bg.rows),
         cv::Scalar(0, 0, 0),
         10);
     }
-    cv::circle(
-        bg, cv_offset(rx.back(), ry.back(), bg.rows), 30, cv::Scalar(255, 0, 0), -1);
+    for (size_t i = 0; i < states.size(); i++) {
+      cv::circle(bg,
+                  cv_offset(states.at(i).x, states.at(i).y, bg.rows),
+                  10,
+                  cv::Scalar(0, 255, 0),
+                  -1);
+    }
     cv::circle(bg,
-                cv_offset(state.x, state.y, bg.rows),
-                30,
-                cv::Scalar(0, 255, 0),
-                -1);
+            cv_offset(states.back().x, states.back().y, bg.rows),
+            30,
+            cv::Scalar(0, 0, 255),
+            -1);
+    cv::circle(
+      bg, cv_offset(rx.back(), ry.back(), bg.rows), 30, cv::Scalar(255, 0, 0), -1);
+    cv::arrowedLine(
+        bg,
+        cv_offset(states.back().x, states.back().y, bg.rows),
+        cv_offset(states.back().x + std::cos(states.back().yaw),
+          states.back().y + std::sin(states.back().yaw), 
+          bg.rows), cv::Scalar(255,0,255), 7);
 
     decltype(bg) outImg;
     cv::resize(bg, outImg, cv::Size(), 0.2, 0.2);
     cv::imshow("pid", outImg);
     cv::waitKey(5);
-
   }
-
-  // Visualization
-  std::vector<double> state_x, state_y, state_v;
-  for (auto s : states) {
-    state_x.push_back(s.x);
-    state_y.push_back(s.y);
-    state_v.push_back(s.v);
-  }
-  plt::figure();
-  plt::plot(rx, ry, "-k");
-  plt::plot(wx, wy, "ob");
-  plt::plot(state_x, state_y, "xr");
-  plt::title("PID Controller");
-  plt::show();
 
   return 0;
 }

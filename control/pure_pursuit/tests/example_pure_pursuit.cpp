@@ -1,15 +1,26 @@
 #include "cubic_spline_planner/cubic_spline_planner.h"
-#include "matplotlibcpp.h"
 #include "models/unicycle.h"
 #include "pure_pursuit/pure_pursuit.h"
 #include "speed_profile/speed_profile.h"
 #include "utilities/types.h"
+
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/opencv.hpp>
+
 
 constexpr int MAX_TIME = 5000;
 constexpr double FREQUENCY = 10.0;
 constexpr double TARGET_VELOCITY = 1.0; // [m/s]
 constexpr double LAT = 2;               // lookahead time [s]
 constexpr double PATH_RESOLUTION = 0.1;
+
+cv::Point2i cv_offset(float x, float y, int image_height = 2000) {
+  cv::Point2i output;
+  output.x = int(x * 100) + 600;
+  output.y = image_height - int(y * 100) - image_height / 2;
+  return output;
+}
 
 int main() {
 
@@ -73,42 +84,41 @@ int main() {
     }
     time++;
     states.push_back(state);
-  }
 
-  // Visualization
-  std::vector<double> state_x, state_y, state_v;
-  for (auto s : states) {
-    state_x.push_back(s.x);
-    state_y.push_back(s.y);
-    state_v.push_back(s.v);
-  }
-  matplotlibcpp::figure();
-  matplotlibcpp::plot(rx, ry, "-k");
-  matplotlibcpp::plot(wx, wy, "ob");
-  matplotlibcpp::plot(state_x, state_y, "xr");
-  matplotlibcpp::title("Pure Pursuit Controller");
-  matplotlibcpp::show();
+    cv::Mat bg(2000, 2000, CV_8UC3, cv::Scalar(255, 255, 255));
+    for(size_t i=1; i<rx.size(); i++){
+      cv::line(
+        bg,
+        cv_offset(rx.at(i-1), ry.at(i-1), bg.rows),
+        cv_offset(rx.at(i), ry.at(i), bg.rows),
+        cv::Scalar(0, 0, 0),
+        10);
+    }
+    for (size_t i = 0; i < states.size(); i++) {
+      cv::circle(bg,
+                  cv_offset(states.at(i).x, states.at(i).y, bg.rows),
+                  10,
+                  cv::Scalar(0, 255, 0),
+                  -1);
+    }
+    cv::circle(bg,
+            cv_offset(states.back().x, states.back().y, bg.rows),
+            30,
+            cv::Scalar(0, 0, 255),
+            -1);
+    cv::circle(
+      bg, cv_offset(rx.back(), ry.back(), bg.rows), 30, cv::Scalar(255, 0, 0), -1);
+    cv::arrowedLine(
+        bg,
+        cv_offset(states.back().x, states.back().y, bg.rows),
+        cv_offset(states.back().x + std::cos(states.back().yaw),
+          states.back().y + std::sin(states.back().yaw), 
+          bg.rows), cv::Scalar(255,0,255), 7);
 
-  for (size_t i = 0; i < state_x.size(); i++) {
-    std::vector<double> iix, iiy;
-
-    iix.push_back(rx.at(ids.at(i)));
-    iiy.push_back(ry.at(ids.at(i)));
-
-    std::vector<double> xx;
-    std::vector<double> yy;
-
-    xx.push_back(state_x.at(i));
-    yy.push_back(state_y.at(i));
-
-    matplotlibcpp::clf();
-    matplotlibcpp::plot(rx, ry, "-k");
-    matplotlibcpp::plot(wx, wy, "ob");
-    matplotlibcpp::plot(xx, yy, "xr");
-    matplotlibcpp::plot(iix, iiy, "og");
-    matplotlibcpp::xlim(xx.front() - 4, xx.front() + 4);
-    matplotlibcpp::ylim(yy.front() - 4, yy.back() + 4);
-    matplotlibcpp::pause(0.0001);
+    decltype(bg) outImg;
+    cv::resize(bg, outImg, cv::Size(), 0.2, 0.2);
+    cv::imshow("pid", outImg);
+    cv::waitKey(5);
   }
 
   return 0;
