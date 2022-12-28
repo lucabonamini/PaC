@@ -1,2 +1,23 @@
 # PaC
-PaC: Planning and Control algorithms written in C++
+PaC: Planning and Control algorithms written in C++.
+
+## Algorithms
+
+### PID
+![](gifs/pid.gif)
+### Pure Pursuit
+![](gifs/pp.gif)
+### DWA
+![](gifs/dwa.gif)
+
+## Build
+
+`mkdir build && cd build`
+
+`cmake ..`
+
+`make -j`
+
+## Run
+
+Executables can be found in `bin/` folder after build process.
