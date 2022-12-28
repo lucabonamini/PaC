@@ -4,7 +4,6 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/opencv.hpp>
 
-
 DEFINE_string(config_file, "", "Set path to configuration file.");
 
 cv::Point2i cv_offset(float x, float y, int image_height = 2000) {
@@ -64,14 +63,20 @@ int main(int argc, char **argv) {
                  -1);
     }
     cv::circle(
-      bg, cv_offset(dwa.viz_traj.front().x, dwa.viz_traj.front().y, bg.rows), 30, cv::Scalar(0, 0, 255), -1);
+        bg,
+        cv_offset(dwa.viz_traj.front().x, dwa.viz_traj.front().y, bg.rows),
+        30,
+        cv::Scalar(0, 0, 255),
+        -1);
 
     cv::arrowedLine(
         bg,
         cv_offset(dwa.viz_traj.front().x, dwa.viz_traj.front().y, bg.rows),
         cv_offset(dwa.viz_traj.front().x + std::cos(dwa.viz_traj.front().yaw),
-          dwa.viz_traj.front().y + std::sin(dwa.viz_traj.front().yaw), 
-          bg.rows), cv::Scalar(255,0,255), 7);
+                  dwa.viz_traj.front().y + std::sin(dwa.viz_traj.front().yaw),
+                  bg.rows),
+        cv::Scalar(255, 0, 255),
+        7);
     decltype(bg) outImg;
     cv::resize(bg, outImg, cv::Size(), 0.2, 0.2);
     cv::imshow("frenet", outImg);

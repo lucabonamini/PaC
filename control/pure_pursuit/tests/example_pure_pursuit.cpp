@@ -8,7 +8,6 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/opencv.hpp>
 
-
 constexpr int MAX_TIME = 5000;
 constexpr double FREQUENCY = 10.0;
 constexpr double TARGET_VELOCITY = 1.0; // [m/s]
@@ -86,34 +85,37 @@ int main() {
     states.push_back(state);
 
     cv::Mat bg(2000, 2000, CV_8UC3, cv::Scalar(255, 255, 255));
-    for(size_t i=1; i<rx.size(); i++){
-      cv::line(
-        bg,
-        cv_offset(rx.at(i-1), ry.at(i-1), bg.rows),
-        cv_offset(rx.at(i), ry.at(i), bg.rows),
-        cv::Scalar(0, 0, 0),
-        10);
+    for (size_t i = 1; i < rx.size(); i++) {
+      cv::line(bg,
+               cv_offset(rx.at(i - 1), ry.at(i - 1), bg.rows),
+               cv_offset(rx.at(i), ry.at(i), bg.rows),
+               cv::Scalar(0, 0, 0),
+               10);
     }
     for (size_t i = 0; i < states.size(); i++) {
       cv::circle(bg,
-                  cv_offset(states.at(i).x, states.at(i).y, bg.rows),
-                  10,
-                  cv::Scalar(0, 255, 0),
-                  -1);
+                 cv_offset(states.at(i).x, states.at(i).y, bg.rows),
+                 10,
+                 cv::Scalar(0, 255, 0),
+                 -1);
     }
     cv::circle(bg,
-            cv_offset(states.back().x, states.back().y, bg.rows),
-            30,
-            cv::Scalar(0, 0, 255),
-            -1);
-    cv::circle(
-      bg, cv_offset(rx.back(), ry.back(), bg.rows), 30, cv::Scalar(255, 0, 0), -1);
-    cv::arrowedLine(
-        bg,
-        cv_offset(states.back().x, states.back().y, bg.rows),
-        cv_offset(states.back().x + std::cos(states.back().yaw),
-          states.back().y + std::sin(states.back().yaw), 
-          bg.rows), cv::Scalar(255,0,255), 7);
+               cv_offset(states.back().x, states.back().y, bg.rows),
+               30,
+               cv::Scalar(0, 0, 255),
+               -1);
+    cv::circle(bg,
+               cv_offset(rx.back(), ry.back(), bg.rows),
+               30,
+               cv::Scalar(255, 0, 0),
+               -1);
+    cv::arrowedLine(bg,
+                    cv_offset(states.back().x, states.back().y, bg.rows),
+                    cv_offset(states.back().x + std::cos(states.back().yaw),
+                              states.back().y + std::sin(states.back().yaw),
+                              bg.rows),
+                    cv::Scalar(255, 0, 255),
+                    7);
 
     decltype(bg) outImg;
     cv::resize(bg, outImg, cv::Size(), 0.2, 0.2);

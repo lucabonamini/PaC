@@ -7,22 +7,24 @@
 #include <iostream>
 
 DWA::DWA(const Config &config,
-         const Obstacles &obstacles,
+         Obstacles obstacles,
          const ::types::Point &goal,
          const ::types::State &init_state)
-    : config_(config), obstacles_(obstacles), goal_(goal), state_(init_state) {
+    : config_(config)
+    , obstacles_(std::move(obstacles))
+    , goal_(goal)
+    , state_(init_state) {
   unicycle_ = std::make_unique<::model::Unicycle>(config_.dt);
 }
 
 Config DWA::parseConfigFile(const std::string &config_file) {
-  FILE *fp = fopen(config_file.c_str(), "r");
-  char buffer[65536];
-  rapidjson::FileReadStream is(fp, buffer, sizeof(buffer));
+  // auto *fp = fopen(config_file.c_str(), "re");
+  char buffer[65536]; // NOLINT
+  rapidjson::FileReadStream is(fopen(config_file.c_str(), "re"), buffer, sizeof(buffer)); // NOLINT
   rapidjson::Document d;
   d.ParseStream(is);
-  fclose(fp);
   return Config{
-      .max_lin_vel = static_cast<double>(d["max_lin_vel"].GetDouble()),
+      .max_lin_vel = static_cast<double>(d["max_lin_vel"].GetDouble()), // NOLINT
       .min_lin_vel = static_cast<double>(d["min_lin_vel"].GetDouble()),
       .max_ang_vel = static_cast<double>(d["max_ang_vel"].GetDouble()),
       .max_acc = static_cast<double>(d["max_acc"].GetDouble()),
@@ -41,7 +43,7 @@ Config DWA::parseConfigFile(const std::string &config_file) {
           static_cast<double>(d["lin_vel_cost_gain"].GetDouble())};
 }
 
-DynamicWindow DWA::calcDynamicWindow() {
+DynamicWindow DWA::calcDynamicWindow() const {
   return DynamicWindow{
       .min_lin_vel_limit = std::max(
           (state_.v - config_.max_acc * 1.0 / config_.dt), config_.min_lin_vel),
@@ -57,7 +59,7 @@ DynamicWindow DWA::calcDynamicWindow() {
 
 ::types::Traj DWA::calcTrajectory(const double &lin_vel,
                                   const double &ang_vel,
-                                  const ::types::State &state) {
+                                  const ::types::State &state) const {
   ::types::Traj traj;
   double time = 0.0;
   auto tmp = state;
@@ -72,7 +74,7 @@ DynamicWindow DWA::calcDynamicWindow() {
   return traj;
 }
 
-double DWA::calcToGoalCost(const ::types::Traj &trajectory) {
+double DWA::calcToGoalCost(const ::types::Traj &trajectory) const {
   double goal_magnitude = sqrt(pow(goal_.x, 2) + pow(goal_.y, 2));
   double traj_magnitude =
       sqrt(pow(trajectory.back().x, 2) + pow(trajectory.back().y, 2));
@@ -84,16 +86,16 @@ double DWA::calcToGoalCost(const ::types::Traj &trajectory) {
   return cost;
 }
 
-double DWA::calcSpeedCost(const double &last_lin_vel) {
+double DWA::calcSpeedCost(const double &last_lin_vel) const {
   return config_.lin_vel_cost_gain * (config_.max_lin_vel - last_lin_vel);
 }
 
-double DWA::calcObstacleCost(const ::types::Traj &trajectory) {
+double DWA::calcObstacleCost(const ::types::Traj &trajectory) const {
   double min = std::numeric_limits<double>::max();
   for (size_t i = 0; i < trajectory.size(); i += 2) {
-    for (size_t j = 0; j < obstacles_.size(); ++j) {
-      double dx = trajectory.at(i).x - obstacles_.at(j).x;
-      double dy = trajectory.at(i).y - obstacles_.at(j).y;
+    for (const auto& obstacle : obstacles_) {
+      double dx = trajectory.at(i).x - obstacle.x;
+      double dy = trajectory.at(i).y - obstacle.y;
       double r = sqrt(pow(dx, 2) + pow(dy, 2));
       if (r <= config_.robot_radius) {
         return std::numeric_limits<double>::max();
@@ -106,7 +108,7 @@ double DWA::calcObstacleCost(const ::types::Traj &trajectory) {
   return 1.0 / min;
 }
 
-double DWA::calcTrajectoryCost(const ::types::Traj &trajectory) {
+double DWA::calcTrajectoryCost(const ::types::Traj &trajectory) const {
   double to_goal_cost = calcToGoalCost(trajectory);
   auto speed_cost = calcSpeedCost(trajectory.back().v);
   auto obstacle_cost = calcObstacleCost(trajectory);
@@ -119,10 +121,10 @@ double DWA::calcTrajectoryCost(const ::types::Traj &trajectory) {
   ::types::Controls best_controls;
   auto tmp_state = state_;
   double min_cost = std::numeric_limits<double>::max();
-  for (double v = dw.min_lin_vel_limit; v <= dw.max_lin_vel_limit;
-       v += config_.lin_vel_resolution) {
-    for (double w = dw.min_ang_vel_limit; w <= dw.max_ang_vel_limit;
-         w += config_.ang_vel_resolution) {
+  for (double v = dw.min_lin_vel_limit; v <= dw.max_lin_vel_limit; // NOLINT
+       v += config_.lin_vel_resolution) { // NOLINT
+    for (double w = dw.min_ang_vel_limit; w <= dw.max_ang_vel_limit; // NOLINT
+         w += config_.ang_vel_resolution) { // NOLINT
       auto traj = calcTrajectory(v, w, tmp_state);
       auto total_cost = calcTrajectoryCost(traj);
       if (min_cost >= total_cost) {
@@ -136,20 +138,14 @@ double DWA::calcTrajectoryCost(const ::types::Traj &trajectory) {
   return best_controls;
 }
 
-bool DWA::isGoalReached() {
-  if (sqrt(pow((state_.x - goal_.x), 2) + pow((state_.y - goal_.y), 2)) <=
-      config_.robot_radius) {
-    return true;
-  }
-  return false;
+bool DWA::isGoalReached() const {
+  return sqrt(pow((state_.x - goal_.x), 2) + pow((state_.y - goal_.y), 2)) <=
+      config_.robot_radius;
 }
 
 bool DWA::dwaControls() {
   auto dynamic_window = calcDynamicWindow();
   auto controls = calcBestControls(dynamic_window);
   unicycle_->updateState(state_, controls);
-  if (isGoalReached()) {
-    return true;
-  }
-  return false;
+  return isGoalReached();
 }

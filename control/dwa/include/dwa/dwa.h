@@ -8,7 +8,7 @@
 class DWA {
 public:
   DWA(const Config &config,
-      const Obstacles &obstacles,
+      Obstacles obstacles,
       const ::types::Point &goal,
       const ::types::State &init_state);
   ~DWA(){};
@@ -18,16 +18,16 @@ public:
   ::types::Traj viz_traj;
 
 private:
-  DynamicWindow calcDynamicWindow();
+  DynamicWindow calcDynamicWindow() const;
   ::types::Controls calcBestControls(const DynamicWindow &dw);
   ::types::Traj calcTrajectory(const double &lin_vel,
                                const double &ang_vel,
-                               const ::types::State &state);
-  double calcTrajectoryCost(const ::types::Traj &trajectory);
-  double calcToGoalCost(const ::types::Traj &trajectory);
-  double calcSpeedCost(const double &last_lin_vel);
-  double calcObstacleCost(const ::types::Traj &trajectory);
-  bool isGoalReached();
+                               const ::types::State &state) const;
+  double calcTrajectoryCost(const ::types::Traj &trajectory) const;
+  double calcToGoalCost(const ::types::Traj &trajectory) const;
+  double calcSpeedCost(const double &last_lin_vel) const;
+  double calcObstacleCost(const ::types::Traj &trajectory) const;
+  bool isGoalReached() const;
   Config config_;
   Obstacles obstacles_;
   ::types::Point goal_;

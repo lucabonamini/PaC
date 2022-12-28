@@ -8,7 +8,7 @@ constexpr double coeff_c = 2.0;
 
 namespace planning {
 Spline::Spline(const std::vector<double> &x, const std::vector<double> &y)
-    : x(x), y(y), nx(x.size()), h(utilities::math::vecDiff(x)), a(y) {
+    : x(x), y(y), nx(static_cast<int>(x.size())), h(utilities::math::vecDiff(x)), a(y) {
   Eigen::MatrixXd A = calc_A();
   Eigen::VectorXd B = calc_B();
   Eigen::VectorXd c_eigen = A.colPivHouseholderQr().solve(B); // NOLINT
@@ -75,15 +75,15 @@ Eigen::VectorXd Spline::calc_B() {
   return B;
 }
 
-int Spline::bisect(double t, int start, int end) {
+int Spline::bisect(double t, int start, int end) { // NOLINT
   int mid = (start + end) / static_cast<int>(coeff_c);
   if (t == x[mid] || end - start <= 1) {
     return mid;
   }
   if (t > x[mid]) {
-    return bisect(t, mid, end);
+    return bisect(t, mid, end); // NOLINT
   }
-  return bisect(t, start, mid);
+  return bisect(t, start, mid); // NOLINT
 }
 
 Spline2D::Spline2D(const std::vector<double> &x, const std::vector<double> &y)
