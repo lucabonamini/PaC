@@ -20,11 +20,13 @@ DWA::DWA(const Config &config,
 Config DWA::parseConfigFile(const std::string &config_file) {
   // auto *fp = fopen(config_file.c_str(), "re");
   char buffer[65536]; // NOLINT
-  rapidjson::FileReadStream is(fopen(config_file.c_str(), "re"), buffer, sizeof(buffer)); // NOLINT
+  rapidjson::FileReadStream is(
+      fopen(config_file.c_str(), "re"), buffer, sizeof(buffer)); // NOLINT
   rapidjson::Document d;
   d.ParseStream(is);
   return Config{
-      .max_lin_vel = static_cast<double>(d["max_lin_vel"].GetDouble()), // NOLINT
+      .max_lin_vel =
+          static_cast<double>(d["max_lin_vel"].GetDouble()), // NOLINT
       .min_lin_vel = static_cast<double>(d["min_lin_vel"].GetDouble()),
       .max_ang_vel = static_cast<double>(d["max_ang_vel"].GetDouble()),
       .max_acc = static_cast<double>(d["max_acc"].GetDouble()),
@@ -93,7 +95,7 @@ double DWA::calcSpeedCost(const double &last_lin_vel) const {
 double DWA::calcObstacleCost(const ::types::Traj &trajectory) const {
   double min = std::numeric_limits<double>::max();
   for (size_t i = 0; i < trajectory.size(); i += 2) {
-    for (const auto& obstacle : obstacles_) {
+    for (const auto &obstacle : obstacles_) {
       double dx = trajectory.at(i).x - obstacle.x;
       double dy = trajectory.at(i).y - obstacle.y;
       double r = sqrt(pow(dx, 2) + pow(dy, 2));
@@ -121,10 +123,10 @@ double DWA::calcTrajectoryCost(const ::types::Traj &trajectory) const {
   ::types::Controls best_controls;
   auto tmp_state = state_;
   double min_cost = std::numeric_limits<double>::max();
-  for (double v = dw.min_lin_vel_limit; v <= dw.max_lin_vel_limit; // NOLINT
-       v += config_.lin_vel_resolution) { // NOLINT
+  for (double v = dw.min_lin_vel_limit; v <= dw.max_lin_vel_limit;   // NOLINT
+       v += config_.lin_vel_resolution) {                            // NOLINT
     for (double w = dw.min_ang_vel_limit; w <= dw.max_ang_vel_limit; // NOLINT
-         w += config_.ang_vel_resolution) { // NOLINT
+         w += config_.ang_vel_resolution) {                          // NOLINT
       auto traj = calcTrajectory(v, w, tmp_state);
       auto total_cost = calcTrajectoryCost(traj);
       if (min_cost >= total_cost) {
@@ -140,7 +142,7 @@ double DWA::calcTrajectoryCost(const ::types::Traj &trajectory) const {
 
 bool DWA::isGoalReached() const {
   return sqrt(pow((state_.x - goal_.x), 2) + pow((state_.y - goal_.y), 2)) <=
-      config_.robot_radius;
+         config_.robot_radius;
 }
 
 bool DWA::dwaControls() {

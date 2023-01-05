@@ -8,7 +8,11 @@ constexpr double coeff_c = 2.0;
 
 namespace planning {
 Spline::Spline(const std::vector<double> &x, const std::vector<double> &y)
-    : x(x), y(y), nx(static_cast<int>(x.size())), h(utilities::math::vecDiff(x)), a(y) {
+    : x(x)
+    , y(y)
+    , nx(static_cast<int>(x.size()))
+    , h(utilities::math::vecDiff(x))
+    , a(y) {
   Eigen::MatrixXd A = calc_A();
   Eigen::VectorXd B = calc_B();
   Eigen::VectorXd c_eigen = A.colPivHouseholderQr().solve(B); // NOLINT

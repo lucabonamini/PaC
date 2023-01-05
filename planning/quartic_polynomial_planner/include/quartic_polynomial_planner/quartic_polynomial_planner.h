@@ -21,12 +21,14 @@ public:
            a4_ * std::pow(t, 4);
   };
   double calcFirstDerivative(double t) const {
-    return a1_ + 2 * a2_ * t + 3 * a3_ * std::pow(t, 2) + 4 * a4_ * std::pow(t, 3);
+    return a1_ + 2 * a2_ * t + 3 * a3_ * std::pow(t, 2) +
+           4 * a4_ * std::pow(t, 3);
   };
   double calcSecondDerivative(double t) const {
     return 2 * a2_ + 6 * a3_ * t + 12 * a4_ * std::pow(t, 2);
   };
   double calcThirdDerivative(double t) const { return 6 * a3_ + 24 * a4_ * t; };
+
 private:
   // current parameter at t=0
   double xs_ = 0.0;

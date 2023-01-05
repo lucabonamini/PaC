@@ -1,7 +1,6 @@
 #include "quartic_polynomial_planner/quartic_polynomial_planner.h"
 #include <eigen3/unsupported/Eigen/MatrixFunctions>
 
-
 QuarticPolynomial::QuarticPolynomial(
     double xs, double vxs, double axs, double vxe, double axe, double t)
     : xs_(xs)
