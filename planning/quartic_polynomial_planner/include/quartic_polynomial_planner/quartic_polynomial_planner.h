@@ -1,49 +1,44 @@
 #pragma once
 
-#include <eigen3/Eigen/Core>
-#include <optional>
-#include <vector>
-
-namespace QuarticPolynomialPlanner {} // namespace QuarticPolynomialPlanner
+#include <cmath>
 
 /**
  * @brief Class for Quartic Polynomial calculation
- * @param xs_ Start position
- * @param vxs_ Start velocity
- * @param axs_ Start acceleration
- * @param vxe_ End desired velocity
- * @param axe_ End desired acceleration
- * @param T Time
+ * @param xs Start position
+ * @param vxs Start velocity
+ * @param axs Start acceleration
+ * @param vxe End desired velocity
+ * @param axe End desired acceleration
+ * @param t Time
  */
 class QuarticPolynomial {
 public:
-  // current parameter at t=0
-  double xs = 0.0;
-  double vxs = 0.0;
-  double axs = 0.0;
-  // parameters at target t=t_j
-  double vxe = 0.0;
-  double axe = 0.0;
-  // function parameters
-  double a0 = 0.0;
-  double a1 = 0.0;
-  double a2 = 0.0;
-  double a3 = 0.0;
-  double a4 = 0.0;
-
-  QuarticPolynomial(){};
   QuarticPolynomial(
-      double xs_, double vxs_, double axs_, double vxe_, double axe_, double T);
+      double xs, double vxs, double axs, double vxe, double axe, double t);
 
-  double calc_point(double t) const {
-    return a0 + a1 * t + a2 * std::pow(t, 2) + a3 * std::pow(t, 3) +
-           a4 * std::pow(t, 4);
+  double calcPoint(double t) const {
+    return a0_ + a1_ * t + a2_ * std::pow(t, 2) + a3_ * std::pow(t, 3) +
+           a4_ * std::pow(t, 4);
   };
-  double calc_first_derivative(double t) const {
-    return a1 + 2 * a2 * t + 3 * a3 * std::pow(t, 2) + 4 * a4 * std::pow(t, 3);
+  double calcFirstDerivative(double t) const {
+    return a1_ + 2 * a2_ * t + 3 * a3_ * std::pow(t, 2) + 4 * a4_ * std::pow(t, 3);
   };
-  double calc_second_derivative(double t) const {
-    return 2 * a2 + 6 * a3 * t + 12 * a4 * std::pow(t, 2);
+  double calcSecondDerivative(double t) const {
+    return 2 * a2_ + 6 * a3_ * t + 12 * a4_ * std::pow(t, 2);
   };
-  double calc_third_derivative(double t) const { return 6 * a3 + 24 * a4 * t; };
+  double calcThirdDerivative(double t) const { return 6 * a3_ + 24 * a4_ * t; };
+private:
+  // current parameter at t=0
+  double xs_ = 0.0;
+  double vxs_ = 0.0;
+  double axs_ = 0.0;
+  // parameters at target t=t_j
+  double vxe_ = 0.0;
+  double axe_ = 0.0;
+  // function parameters
+  double a0_ = 0.0;
+  double a1_ = 0.0;
+  double a2_ = 0.0;
+  double a3_ = 0.0;
+  double a4_ = 0.0;
 };
