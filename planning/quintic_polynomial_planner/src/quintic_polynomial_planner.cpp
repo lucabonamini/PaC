@@ -1,6 +1,6 @@
 #include "quintic_polynomial_planner/quintic_polynomial_planner.h"
 #include <eigen3/unsupported/Eigen/MatrixFunctions>
-#include <iostream>
+
 
 namespace QuinticPolynomialPlanner {
 std::optional<Output> plan(const Input &input) {
@@ -27,7 +27,6 @@ std::optional<Output> plan(const Input &input) {
       double vy = yqp.calcFirstDerivative(t);
       double v = sqrt(pow(vx, 2) + pow(vy, 2));
       double yaw = atan2(vy, vx);
-      std::cout << vx << "," << vy << "," << yaw << std::endl;
       output->rv.push_back(v);
       output->ryaw.push_back(yaw);
 

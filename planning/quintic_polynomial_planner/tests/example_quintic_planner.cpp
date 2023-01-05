@@ -15,8 +15,8 @@ DEFINE_double(start_y, 10.0, "Start Y position.");
 DEFINE_double(start_yaw, 10.0 * M_PI / 180, "Start Yaw position.");
 DEFINE_double(start_v, 1.0, "Start Velocity.");
 DEFINE_double(start_a, 0.1, "Start Acceleration.");
-DEFINE_double(goal_x, 30.0, "Goal X position.");
-DEFINE_double(goal_y, -10.0, "Goal Y position.");
+DEFINE_double(goal_x, 25.0, "Goal X position.");
+DEFINE_double(goal_y, -5.0, "Goal Y position.");
 DEFINE_double(goal_yaw, 20.0 * M_PI / 180, "Goal Yaw position.");
 DEFINE_double(goal_v, 1.0, "Goal Velocity.");
 DEFINE_double(goal_a, 0.1, "Goal Acceleration.");
@@ -28,8 +28,8 @@ DEFINE_double(max_jerk, 0.5, "Maximum Jerk.");
 
 cv::Point2i cv_offset(float x, float y, int image_height = 2000) {
   cv::Point2i output;
-  output.x = int(x * 100) - 400;
-  output.y = image_height - int(y * 100) - image_height / 1 + 1300;
+  output.x = int(x * 100) - 800;
+  output.y = image_height - int(y * 100) - image_height / 1 + 1200;
   return output;
 }
 
@@ -59,15 +59,15 @@ int main(int argc, char **argv) {
     LOG(ERROR) << "No path found.";
   } else {
     for (auto i = 0; i < output->rx.size(); i++) {
-      cv::Mat bg(3000, 3000, CV_8UC3, cv::Scalar(255, 255, 255));
+      cv::Mat bg(2000, 2000, CV_8UC3, cv::Scalar(255, 255, 255));
       cv::circle(bg,
                  cv_offset(input.sx, input.sy, bg.rows),
-                 30,
+                 50,
                  cv::Scalar(255, 0, 0),
                  -1);
       cv::circle(bg,
                  cv_offset(input.gx, input.gy, bg.rows),
-                 30,
+                 50,
                  cv::Scalar(255, 0, 0),
                  -1);
       cv::arrowedLine(bg,
@@ -76,25 +76,32 @@ int main(int argc, char **argv) {
                                 input.sy + std::sin(input.syaw),
                                 bg.rows),
                       cv::Scalar(255, 0, 255),
-                      7);
+                      10);
       cv::arrowedLine(bg,
                       cv_offset(input.gx, input.gy, bg.rows),
                       cv_offset(input.gx + std::cos(input.gyaw),
                                 input.gy + std::sin(input.gyaw),
                                 bg.rows),
                       cv::Scalar(255, 0, 255),
-                      7);
+                      10);
       cv::arrowedLine(bg,
                       cv_offset(output->rx.at(i), output->ry.at(i), bg.rows),
                       cv_offset(output->rx.at(i) + std::cos(output->ryaw.at(i)),
                                 output->ry.at(i) + std::sin(output->ryaw.at(i)),
                                 bg.rows),
                       cv::Scalar(255, 0, 255),
-                      7);
+                      10);
       decltype(bg) outImg;
       cv::resize(bg, outImg, cv::Size(), 0.2, 0.2);
       cv::imshow("quintic", outImg);
       cv::waitKey(5);
+
+      // save image in build/bin/pngs
+    struct timeval tp;
+    gettimeofday(&tp, NULL);
+    long int ms = tp.tv_sec * 1000 + tp.tv_usec / 1000;
+    std::string int_count = std::to_string(ms);
+    cv::imwrite("/home/nvidia/pngs/"+int_count+".png", outImg);
     }
 
     std::vector<double> pts_x, pts_y;

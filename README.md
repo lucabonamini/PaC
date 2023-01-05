@@ -9,6 +9,8 @@ PaC: Planning and Control algorithms written in C++.
 ![](gifs/pp.gif)
 ### DWA
 ![](gifs/dwa.gif)
+### Quintic Polynomial Planner
+![](gifs/quintic.gif)
 
 ## Build
 
