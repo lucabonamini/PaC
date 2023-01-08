@@ -97,11 +97,11 @@ int main(int argc, char **argv) {
       cv::waitKey(5);
 
       // save image in build/bin/pngs
-    struct timeval tp;
-    gettimeofday(&tp, NULL);
-    long int ms = tp.tv_sec * 1000 + tp.tv_usec / 1000;
-    std::string int_count = std::to_string(ms);
-    cv::imwrite("/home/nvidia/pngs/"+int_count+".png", outImg);
+      struct timeval tp;
+      gettimeofday(&tp, NULL);
+      long int ms = tp.tv_sec * 1000 + tp.tv_usec / 1000;
+      std::string int_count = std::to_string(ms);
+      cv::imwrite("/home/nvidia/pngs/" + int_count + ".png", outImg);
     }
 
     std::vector<double> pts_x, pts_y;

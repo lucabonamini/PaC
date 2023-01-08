@@ -11,6 +11,8 @@ PaC: Planning and Control algorithms written in C++.
 ![](gifs/dwa.gif)
 ### Quintic Polynomial Planner
 ![](gifs/quintic.gif)
+### Frenet Optimal Trajectory
+![](gifs/frenet.gif)
 
 ## Build
 

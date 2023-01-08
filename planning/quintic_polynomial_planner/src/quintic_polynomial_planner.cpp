@@ -1,7 +1,6 @@
 #include "quintic_polynomial_planner/quintic_polynomial_planner.h"
 #include <eigen3/unsupported/Eigen/MatrixFunctions>
 
-
 namespace QuinticPolynomialPlanner {
 std::optional<Output> plan(const Input &input) {
   double vxs = input.sv * std::cos(input.syaw);

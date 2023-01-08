@@ -22,7 +22,7 @@ target_compile_options(QuinticPolynomialPlanner PRIVATE $<$<COMPILE_LANGUAGE:CXX
 
 if(USE_TESTS)
     set(CMAKE_CXX_CLANG_TIDY "")
-    message("Compiling Quartic Polynomial Planner tests")
+    message("Compiling Quintic Polynomial Planner tests")
     add_subdirectory(tests)
 endif()
 
