@@ -56,5 +56,6 @@ struct Input {
 };
 
 struct Output {
-  FrenetPath output_path;
+  FrenetPath best_path;
+  std::vector<FrenetPath> paths_list;
 };

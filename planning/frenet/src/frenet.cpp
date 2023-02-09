@@ -131,8 +131,8 @@ void convertPathsToCartesianCoordinates(std::vector<FrenetPath> &paths_list,
     }
   }
 }
-std::optional<FrenetPath> findBestPath(std::vector<FrenetPath> &paths_list) {
-  std::optional<FrenetPath> best_path;
+FrenetPath findBestPath(std::vector<FrenetPath> &paths_list) {
+  FrenetPath best_path;
   paths_list.erase(
       std::remove_if(paths_list.begin(),
                      paths_list.end(),
@@ -147,12 +147,13 @@ std::optional<FrenetPath> findBestPath(std::vector<FrenetPath> &paths_list) {
   }
   return best_path;
 }
-std::optional<FrenetPath> planFrenetPath(const Input &input) {
+std::optional<Output> planFrenetPath(const Input &input) {
   auto paths_list = calculatePathsInFrenetCoordinates(input);
   CHECK_GT(paths_list.size(), 0) << "No list of paths found";
   convertPathsToCartesianCoordinates(paths_list, input);
   auto best_path = findBestPath(paths_list);
-  CHECK(best_path) << "No path found";
-  return best_path;
+  // CHECK(best_path) << "No path found";
+  return std::make_optional<Output>(
+      Output{.best_path = best_path, .paths_list = paths_list});
 }
 } // namespace Frenet

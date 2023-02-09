@@ -1,6 +1,8 @@
 option(CUBIC_SPLINE "Enable compilation of Cubic Spline Planner" ON)
 option(QUARTIC_POLYNOMIAL_PLANNER "Enable compilation of Quartic Polynomial Planner" ON)
 option(QUINTIC_POLYNOMIAL_PLANNER "Enable compilation of Quintic Polynomial Planner" ON)
+option(FRENET_PLANNER "Enable compilation of Frenet Planner" ON)
+option(BEZIER_PLANNER "Enable compilation of Bezier Planner" ON)
 
 add_subdirectory(speed_profile)
 
@@ -19,5 +21,8 @@ if(QUINTIC_POLYNOMIAL_PLANNER)
   message("Compiling Quintic Polynomial Planner")
   add_subdirectory(quintic_polynomial_planner)
 endif()
-
-add_subdirectory(frenet)
+# Frenet Planner
+if(FRENET_PLANNER)
+  message("Compiling Frenet Planner")
+  add_subdirectory(frenet)
+endif()
