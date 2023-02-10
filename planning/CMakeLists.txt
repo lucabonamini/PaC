@@ -26,3 +26,8 @@ if(FRENET_PLANNER)
   message("Compiling Frenet Planner")
   add_subdirectory(frenet)
 endif()
+# Bezier Planner
+if(BEZIER_PLANNER)
+  message("Compiling Bezier Planner")
+  add_subdirectory(bezier)
+endif()
